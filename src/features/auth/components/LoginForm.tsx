@@ -6,6 +6,7 @@ import { Field, FieldDescription } from "@/components/ui/field"
 import React, { useState } from "react"
 import { loginSchema } from "@/features/auth/validators/loginSchema"
 import z from "zod"
+import { login } from "@/features/auth/services/AuthService"
 
 export function LoginForm() {
 
@@ -34,13 +35,17 @@ export function LoginForm() {
         return true;
     }
 
-    function onSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+    async function onSubmit(e: React.SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         const isValid = validateForm();
 
         if (!isValid) return;
 
-        // TODO: Authentication logic here
+        try {
+            await login({ email, password });
+        } catch (error) {
+            alert("Erro ao fazer login. Verifique suas credenciais e tente novamente.");
+        }
     }
 
     return (
